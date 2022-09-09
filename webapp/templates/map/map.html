@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block header %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+    crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+    integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+    crossorigin=""></script>
+<script src="{{url_for('static', filename='polyline.encoded.js')}}"></script>
+
+
+<script>
+    console.log('hi')
+    window.onload = function () {
+        makemap()
+    }
+    
+
+</script>
+
+<!-- <style>
+    #map {
+        height: 180px;
+    }
+</style> -->
+<h1>{% block title %}map{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+<div id='map' style="height: 580px;">It's a cool map</div>
+<script>
+    function makemap(){
+        var map = L.map('map').setView([47.693, -117.252], 10);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '© OpenStreetMap'
+        }).addTo(map);
+        let lines = getlines();
+        lines.then(lines=>{
+            lines.forEach(line => {
+                polyline = line.line;
+                let lineobj = {color:line.color}
+                var poly = L.Polyline.fromEncoded(polyline, lineobj).addTo(map);
+                poly.bindPopup(`<div>${line.name}</div><div>${line.min}</div>`)
+            });
+        })
+        // lines = '{{paths}}'
+        // line2 = 'ku`bHzhqjUCyBD}C@mV?eCEmBF{OEwBCiLHuBPsA`@uAd@iA\\i@`@a@lAaANI|Bu@~A_@xAo@^WjCuAZIxBWb@Q\\W'
+        // var poly = L.Polyline.fromEncoded(line2, {color: '#9e12f3'}).addTo(map)
+        return map
+    };
+    async function getlines() {
+        let url = '{{url_for('map.mapsegments')}}';
+        let res = await fetch(url);
+        return await res.json();
+    }
+</script>
+{% endblock %}

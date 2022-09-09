@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Register{% endblock %}</h1>
+
+  <script>
+    function triggerstravapull() {
+      let url = '{{url_for('user.pulldata')}}';
+      let res = fetch(url)
+        .then((response)=>response.json())
+        .then((data) => console.log(data));
+    }
+    function updatecolor() {
+      async function updatecolor(newcolor) {
+        let url = '{{url_for('user.color')}}';
+        let head = new Headers();
+        head.append('Content-type', 'application/json')
+        const params = {color: newcolor}
+        bodyargs = JSON.stringify(params);
+        console.log(params);
+        console.log(bodyargs);
+        let res = await fetch(url, {method:'POST', 
+                                    headers: head,
+                                    body:bodyargs});
+        return await res.json();
+    };
+    newcolor = document.getElementById('Usercolor').value;
+    console.log(newcolor);
+    updatecolor(newcolor).then(data => {console.log(data);
+                                        document.getElementById("colorsubmit").value="updated"});
+    }
+    function resetsubmitbutton() {
+      let button = document.getElementById("colorsubmit");
+      let currvalue = button.value;
+      if(currvalue == 'updated'){
+        button.value = 'update color'
+      }
+    }
+  </script>
+
+  {% endblock %}
+
+
+{% block content %}
+  <div>
+    {{g.user.name}}
+  </div>
+  {% if not g.user.isauthenticated() %}
+    <div>
+      <a href="{{ url_for('auth.authorize_strava') }}">Authorize Strava</a>
+    </div>
+  {% else %}
+    <div>
+      <button onclick="triggerstravapull();">Update Strava</button>
+    </div>
+  {% endif %}
+  <div>
+      <input type="color" id="Usercolor" name="Usercolor"value="{{g.user.color[:7]}}"onclick="resetsubmitbutton();">
+      <label for="Usercolor">User Color</label>
+      <input type="submit" value="update color" id="colorsubmit" onclick="updatecolor();">
+  </div>
+
+{% endblock %}
