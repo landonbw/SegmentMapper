@@ -26,12 +26,15 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        devpass = request.form['devpassword']   
         email = request.form['email']
         error = None
         if not username:
             error = "Username is required"
         elif not password:
             error = "Password is required."
+        elif devpass != 'carrothorsesheepred':
+            error = "Incorrect development password"
         if error is None:
             newuser = User(username, email, generate_password_hash(password))
             try:
@@ -40,7 +43,7 @@ def register():
                 error = "stored user"
             except Exception as e:
                 error = f"User {username} is already registered"
-                raise e
+                # raise e
             else:
                 return redirect(url_for("auth.login"))
         flash(error)
@@ -60,7 +63,9 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user.id
-            return redirect(url_for('blog.index'))
+            if user.isauthenticated():
+                return redirect(url_for('map.index'))
+            return redirect(url_for('auth.authorize_strava'))
         
         flash(error)
     return render_template('auth/login.html')
