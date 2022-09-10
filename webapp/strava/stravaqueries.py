@@ -21,5 +21,7 @@ def effort_lookup(eid):
 
 def user_activities(n, page):
     at = user_token()
+    if g.user.activities:
+        return _activities(n, page, at, before=g.user.earliest_activity().timestamp()) + _activities(n, page, at, after=g.user.latest_activity().timestamp())
     return _activities(n, page, at)
 

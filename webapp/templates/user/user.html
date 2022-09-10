@@ -5,10 +5,15 @@
 
   <script>
     function triggerstravapull() {
+      loadinggif = document.getElementById('loading')
+      loadinggif.style.display = 'block';
       let url = '{{url_for('user.pulldata')}}';
       let res = fetch(url)
         .then((response)=>response.json())
-        .then((data) => console.log(data));
+        .then((data) => {console.log(data);
+              loadinggif.style.display = 'none';
+              window.location.reload()}
+        );
     }
     function updatecolor() {
       async function updatecolor(newcolor) {
@@ -53,11 +58,17 @@
     <div>
       <button onclick="triggerstravapull();">Update Strava</button>
     </div>
+    <div>
+      activities from {{g.user.earliest_activity()}} to {{g.user.latest_activity()}}
+    </div>
   {% endif %}
   <div>
       <input type="color" id="Usercolor" name="Usercolor"value="{{g.user.color[:7]}}"onclick="resetsubmitbutton();">
       <label for="Usercolor">User Color</label>
       <input type="submit" value="update color" id="colorsubmit" onclick="updatecolor();">
+  </div>
+  <div>
+    <img src="{{url_for('static', filename='images/loading.gif')}}" id="loading" style="display:none">
   </div>
 
 {% endblock %}

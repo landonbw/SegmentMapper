@@ -35,7 +35,11 @@ def color():
 @bp.route('/pulldata')
 @login_required
 def pulldata():
-    activities = user_activities(n=20, page=1)
+    if g.user.activities:
+        n = 50
+    else:
+        n = 100
+    activities = user_activities(n=n, page=1)
     for i, act in enumerate(activities):
         act_obj = db_session.merge(Activity(id=act['id']))
         print(i, act_obj.id)

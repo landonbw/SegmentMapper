@@ -26,6 +26,16 @@ class User(Base):
             return True
         return False
 
+    def earliest_activity(self):
+        if self.activities:
+            return min(a.date for a in self.activities)
+        return None
+
+    def latest_activity(self):
+        if self.activities:
+            return max(a.date for a in self.activities)
+        return None
+
     def __init__(self, name=None, email=None, password=None):
         self.name = name
         self.email = email
