@@ -39,32 +39,11 @@ def exchange_token():
             db_session.commit()
         except:
             pass
+    return redirect(url_for('user.user_screen'))
 
-    
-    # activities = user_activities(n=20, page=1)
-    # for i, act in enumerate(activities):
-    #     act_obj = db_session.merge(Activity(id=act['id']))
-    #     print(i, act_obj.id)
-    #     actinfo = activity_lookup(act_obj.id)
-    #     act_obj.distance = actinfo['distance']
-    #     act_obj.movingtime = actinfo['moving_time']
-    #     act_obj.date = dt.datetime.fromisoformat(actinfo['start_date'][:-1])
-    #     for effort in actinfo['segment_efforts']:
-    #         segment = db_session.merge(Segment(id=effort['segment']['id']))
-    #         segment.distance = effort['segment']['distance']
-    #         if not segment.polyline or not segment.name:
-    #             segmentinfo = segment_lookup(segment.id)
-    #             segment.polyline = segmentinfo['map']['polyline']
-    #             segment.name = segmentinfo['name']
-    #         effortobj = db_session.merge(Effort(id=effort['id'], duration=effort['moving_time']))
-    #         effortobj.user = g.user
-    #         effortobj.activity = act_obj
-    #         segment.efforts.append(effortobj)
-    #         db_session.commit()
-
-    #     g.user.activities.append(act_obj)
-    #     db_session.commit()
-
-
-    return redirect(url_for('map.index'))
+@bp.route("/")
+def index():
+    if g.user:
+        return redirect(url_for('user.user_screen'))
+    return redirect(url_for('auth.register'))
 

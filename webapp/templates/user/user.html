@@ -28,19 +28,35 @@
                                     headers: head,
                                     body:bodyargs});
         return await res.json();
-    };
+      };
     newcolor = document.getElementById('Usercolor').value;
     console.log(newcolor);
     updatecolor(newcolor).then(data => {console.log(data);
                                         document.getElementById("colorsubmit").value="updated"});
-    }
+    };
     function resetsubmitbutton() {
       let button = document.getElementById("colorsubmit");
       let currvalue = button.value;
       if(currvalue == 'updated'){
         button.value = 'update color'
       }
-    }
+    };
+
+    function update_activity_dates() {
+      url = '{{url_for('user.activity_bounds')}}';
+      let res = fetch(url).then(response=>response.json())
+                          .then(data=> {
+                            aa = data;
+                            console.log(data);
+                            console.log(aa.earliest_content);
+                            console.log(aa.latest_content);
+                            document.getElementById('earliest_activity').textContent = aa.earliest_activity;
+                            document.getElementById('latest_activity').textContent = aa.latest_activity;
+                            }
+                          )
+    };
+
+    let interval = setInterval(update_activity_dates, 1000);
   </script>
 
   {% endblock %}
@@ -59,7 +75,7 @@
       <button onclick="triggerstravapull();">Update Strava</button>
     </div>
     <div>
-      activities from {{g.user.earliest_activity()}} to {{g.user.latest_activity()}}
+      activities from <span id='earliest_activity'>{{g.user.earliest_activity()}}</span> to <span id='latest_activity'>{{g.user.latest_activity()}}</span>
     </div>
   {% endif %}
   <div>

@@ -66,3 +66,9 @@ def pulldata():
     activities = [a.name for a in g.user.activities]
     return activities
     # 
+
+@bp.route('/activity_bounds')
+@login_required
+def activity_bounds():
+    user = g.user
+    return {'earliest_activity':user.earliest_activity(), 'latest_activity':user.latest_activity()}

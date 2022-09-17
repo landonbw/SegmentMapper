@@ -85,5 +85,5 @@ def login_required(view):
 
 @bp.route('/strava')
 def authorize_strava():
-    authurl = f"http://www.strava.com/oauth/authorize?client_id={current_app.config['strava_client_id']}&response_type=code&redirect_uri=http://localhost/exchange_token&approval_prompt=force&scope=read_all,profile:read_all,activity:read_all"
+    authurl = f"http://www.strava.com/oauth/authorize?client_id={current_app.config['strava_client_id']}&response_type=code&redirect_uri=http://localhost:5000/exchange_token&approval_prompt=force&scope=read_all,profile:read_all,activity:read_all"
     return redirect(authurl)

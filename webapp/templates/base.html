@@ -1,8 +1,8 @@
 <!doctype html>
-<title>{% block title %}{% endblock %} - shikimo</title>
+<title>{% block title %}{% endblock %} - Strava Segment Tracker</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 <nav>
-  <h1><a href="{{ url_for('blog.index') }}">Shikimo</a></h1>
+  <h1><a href="{{ url_for('blog.index') }}">Strava Segment Tracker</a></h1>
   <ul>
     <li><a href="{{ url_for('map.index') }}">Map</a></li>
     {% if g.user %}
@@ -23,3 +23,11 @@
   {% endfor %}
   {% block content %}{% endblock %}
 </section>
+
+<footer>
+  <div class="fleft">© 2022 LWright</div>  
+  <div class="fright">
+    <img id=poweredby src="{{url_for('static', filename='images/api_logo_pwrdBy_strava_horiz_light.svg')}}">
+  </div>
+  
+</footer>

@@ -8,7 +8,7 @@ from webapp.auth import login_required
 from webapp.database import db_session
 from webapp.models import Post
 
-bp = Blueprint('blog', __name__)
+bp = Blueprint('blog', __name__, url_prefix='/blog')
 
 @bp.route('/')
 def index():
